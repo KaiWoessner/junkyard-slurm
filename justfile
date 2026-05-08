@@ -101,6 +101,10 @@ _build_rootfs debootstrap_release root_password hostname size:
       --customize-hook='mkdir -p "$1/etc/systemd/system/kmsconvt@.service.d" && printf "[Service]\nExecStart=\nExecStart=/usr/bin/kmscon \"--vt=%%I\" --seats=seat0 --no-switchvt --login -- /sbin/agetty -a kalm - xterm-256color\n" > "$1/etc/systemd/system/kmsconvt@.service.d/override.conf"' \
       --customize-hook='mkdir -p "$1/etc/systemd/system/adbd.service.d" && printf "[Unit]\nWants=sys-kernel-config.mount\nAfter=\n\n[Service]\nSocketBindDeny=tcp:5555\n" > "$1/etc/systemd/system/adbd.service.d/override.conf"' \
       --customize-hook='ln -s /dev/null "$1/etc/systemd/system/systemd-backlight@.service"' \
+      --customize-hook='if [ -d overlay ]; then cp -a overlay/. "$1/"; fi' \
+      --customize-hook='if [ -f "$1/usr/local/bin/pixel-devinfo" ]; then chmod 755 "$1/usr/local/bin/pixel-devinfo"; fi' \
+      --customize-hook='if [ -f "$1/usr/local/sbin/mark-boot-successful" ]; then chmod 755 "$1/usr/local/sbin/mark-boot-successful"; fi' \
+      --customize-hook='if [ -f "$1/etc/systemd/system/mark-boot-successful.service" ]; then chroot "$1" systemctl enable mark-boot-successful.service; fi' \
       --customize-hook='chroot "$1" dracut --kver {{ _kernel_version }} --show-modules --force' \
       {{ _sysroot_dir }}
 
