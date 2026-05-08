@@ -19,3 +19,9 @@ sudo
 btrfs-progs
 tmux
 adbd
+git
+meson
+cmake
+zlib1g-dev
+linux-libc-dev
+pkg-config
